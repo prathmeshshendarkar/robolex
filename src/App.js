@@ -12,6 +12,8 @@ class App extends Component {
       // Now we want to fetch the users from an API and list them
       // Why we are starting with an empty array? well we don't want users to view just half of the monsters
       // First we will fetch the monsters and then update them to the state.
+
+      searchField:"",
     };
   }
 
@@ -28,23 +30,43 @@ class App extends Component {
 
   };
 
+  // Optimizing anonymous functions
+  onSearchChange = (event) => {
+    this.setState(() => {
+      return {searchField: event.target.value};
+    })
+  }
 
   render(){
+
+    // Use of variables
+    const {onSearchChange} = this
+    const {monsters, searchField} = this.state
+
+    const users = monsters.filter((monster) => {
+      return monster.name.toLowerCase().includes(searchField.toLowerCase());
+    });
+
     return (
       <div className='App'>
-        <input className='search-box' placeholder='search-monsters' type='search' onChange={(event) => {
+        {/* <input className='search-box' placeholder='search-monsters' type='search' onChange={(event) => {
           console.log(event.target.value);
           this.setState(() => {
             const users = this.state.monsters.filter((monster) => {
               return monster.name.toLowerCase().includes(event.target.value)
             });
-            return {monsters:users};
+            return {monsters:users}; // Why is this bad???
+            Well because we are storing the users directly to the state, that means there is no way we can get back to original state
+            we need a system that will store the filtered array into a object and then will update that to the original list.
           }, () => {
             console.log("Succes");
           })
-        }}/>
+        }}/> */}
+        <input className='search-Field' placeholder='Search for Monsters' type='search' onChange={onSearchChange}/>
+
+
         {
-          this.state.monsters.map((monster) => {
+          users.map((monster) => {
             return (
                // When we use map, we need to keep track of individual elements that gets rendered
               // To do that, the parent element inside the map function should have a key value. So we are going to add div function and add a key element to it
