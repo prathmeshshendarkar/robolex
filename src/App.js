@@ -1,10 +1,12 @@
 import './App.css';
 import React, { Component } from 'react';
-
+import CardList from './components/card-list.component';
+import SearchBox from './components/search-box.component';
 
 // Lets now call the monsters from this.state using map function
 class App extends Component {
   constructor(){
+    // console.log('constructor');
     super();
 
     this.state = {
@@ -20,6 +22,7 @@ class App extends Component {
   // Now, to fetch the names from an API react gives us a lifecycle method
   // We want to render as soon as the component is loaded i.e. as soon as component is mounted
   componentDidMount(){
+    // console.log('Component-did mount');
     fetch('https://jsonplaceholder.typicode.com/users') // First fetch will get the response from api async request
       .then((response) => response.json()) // This request will return a promise with the response which is not in json format
       .then((users) =>  this.setState(() => { // After converting to json format, we can update the state with users
@@ -32,12 +35,14 @@ class App extends Component {
 
   // Optimizing anonymous functions
   onSearchChange = (event) => {
+    // console.log('onsearch function')
     this.setState(() => {
       return {searchField: event.target.value};
     })
   }
 
   render(){
+    // console.log('app-rendering');
 
     // Use of variables
     const {onSearchChange} = this
@@ -62,21 +67,11 @@ class App extends Component {
             console.log("Succes");
           })
         }}/> */}
-        <input className='search-Field' placeholder='Search for Monsters' type='search' onChange={onSearchChange}/>
-
-
-        {
-          users.map((monster) => {
-            return (
-               // When we use map, we need to keep track of individual elements that gets rendered
-              // To do that, the parent element inside the map function should have a key value. So we are going to add div function and add a key element to it
-              // The key element should be unique in the state, and should not overlap, like ID or something.
-              <div key={monster.id}>
-                <h1>{monster.name}</h1>
-              </div>
-            )
-          })
-        }
+        {/* <input className='search-Field' placeholder='Search for Monsters' type='search' onChange={onSearchChange}/> */}
+        {/* Why we are going to pass in the classname and placeholder as well? Because we don't want every other search box in our application
+            to have that specific property */}
+        <SearchBox searchBox='searchBox' placeholders='Search For Monsters' onChangeHandler={onSearchChange}/> 
+        <CardList users={users}/>
       </div>
     );
   }
