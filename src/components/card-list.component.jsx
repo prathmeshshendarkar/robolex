@@ -1,4 +1,4 @@
-import { Component } from "react";
+// import { Component } from "react";
 import './card-list.styles.css'
 
 const CardList = ({users}) => {
